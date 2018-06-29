@@ -29,5 +29,5 @@ HTTP Service APIs are defined with Swagger. It is available on [SwaggerHub](http
 1. User gets a player id from POST /player
 2. List of available games are listed: GET /game
 3. User may create a game for other players to join POST /game
-  - User may filter with ?id=`gameId` query string
+    - User may filter with ?id=`gameId` query string
 4. Rest of the flow (joining, playing, ending the game) occurs on web sockets
