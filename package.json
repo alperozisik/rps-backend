@@ -22,6 +22,10 @@
     "url": "https://github.com/alperozisik/rps-backend/issues"
   },
   "homepage": "https://github.com/alperozisik/rps-backend#readme",
+  "engines": {
+    "node": ">=10.5.0",
+    "npm": ">=6.1.0"
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "chai": "^4.1.2",
