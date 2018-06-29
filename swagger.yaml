@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+  version: "1.0"
+  title: 'Rock Paper Scissors'
+  description: 'Rock Paper Scissors Backend'
+paths: 
+  /game: 
+    get:
+      description: "Getting a game or list"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+                uniqueItems: true
+          description: "List of games"
+      parameters:
+        - in: query
+          name: gameId
+          schema:
+            type: string
+          description: "Filters the list games"
+    post:
+      description: "Creating a new game"
+      responses:
+        '201':
+          description: "New game is created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+      requestBody:
+        $ref: '#/components/requestBodies/Game'
+  /player:
+    post:
+      description: "Gets a player id"
+      requestBody:
+        $ref: '#/components/requestBodies/RegisterPlayer'
+      responses:
+        '201':
+          description: "New player ID is retrieved"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/alperozisik/rps/1.0
+components:
+  schemas:
+    Game:
+      type: object
+      properties:
+        id: 
+          type: string
+          format: uuid
+        owner:
+          $ref: '#/components/schemas/Player'
+        gameType:
+          type: string
+          description: Type of the game
+          enum: [RPS, RPSSL]
+        maximumNumberOfPlayers:
+          type: number
+          format: int32
+          description: Maximum number of players
+          minimum: 2
+          maximum: 5
+        state:
+          type: string
+          description: Gives the state of the game
+          enum: [waiting, started, finished]
+    Player:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    GameCreate:
+      type: object
+      properties:
+        owner:
+          type: string
+          description: playerId
+        gameType:
+          type: string
+          description: Type of the game
+          enum: [RPS, RPSSL]
+        maximumNumberOfPlayers:
+          type: number
+          format: int32
+          description: Maximum number of players
+          minimum: 2
+          maximum: 5
+  requestBodies:
+    Game:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GameCreate'
+      description: Game object that needs to be listed
+      required: true
+      
+    RegisterPlayer:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+security:
+  - basicAuth: []

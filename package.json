@@ -4,7 +4,7 @@
   "description": "NodeJS Backend for RPS game",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx mocha tests/index.js --exit"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,19 @@
   "bugs": {
     "url": "https://github.com/alperozisik/rps-backend/issues"
   },
-  "homepage": "https://github.com/alperozisik/rps-backend#readme"
+  "homepage": "https://github.com/alperozisik/rps-backend#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "chai": "^4.1.2",
+    "express": "^4.16.3",
+    "minimist": "^1.2.0",
+    "rps-common": "git+https://github.com/alperozisik/rps-common.git",
+    "swagger-express-middleware": "^1.0.0-alpha.12",
+    "uuid": "^3.3.0",
+    "ws": "^5.2.1"
+  },
+  "devDependencies": {
+    "chai-http": "^4.0.0",
+    "mocha": "^5.2.0"
+  }
 }
