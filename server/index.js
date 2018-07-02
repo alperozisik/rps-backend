@@ -12,7 +12,8 @@ const express = require("express");
 const middleware = require("swagger-express-middleware");
 const app = express();
 const cors = require('cors');
-app.use(cors());
+const corsMiddleware = cors();
+
 
 var exWSS;
 var started = false;
@@ -58,6 +59,10 @@ module.exports = exports = new Promise((resolve, reject) => {
                     port: Number(args.port),
                     app
                 });
+
+                exWSS.app.use(corsMiddleware);
+                exWSS.app.options('*', corsMiddleware);
+
                 require("./http")(exWSS.app); //api-http server
                 require("./ws")(exWSS.wss); //web socket server
 
@@ -66,8 +71,7 @@ module.exports = exports = new Promise((resolve, reject) => {
                 resolveList.length = 0;
 
             });
-        }
-        else {
+        } else {
             resolveList.push(resolve);
         }
         console.log("Server Ready");
