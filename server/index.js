@@ -11,6 +11,8 @@ const WebSocketServer = WebSocket.Server;
 const express = require("express");
 const middleware = require("swagger-express-middleware");
 const app = express();
+const cors = require('cors');
+app.use(cors());
 
 var exWSS;
 var started = false;
