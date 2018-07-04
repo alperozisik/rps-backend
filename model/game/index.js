@@ -6,6 +6,8 @@ const symGameType = Symbol("GameType");
 const symGameId = Symbol("gameId");
 const symGameState = Symbol("gameState");
 const symGameLogic = Symbol("gameLogic");
+const symSockets = Symbol("sockets");
+const symReadyPlayers = Symbol("readyPlayers");
 const gameList = []; //For demo purpose it is kept in memory
 const rps = require("rps-common");
 const uuidv4 = require("uuid/v4");
@@ -21,6 +23,8 @@ class Game {
         this[symGameId] = uuidv4();
         this[symGameState] = GameState.WAITING;
         this[symGameLogic] = null;
+        this[symSockets] = new Map();
+        this[symReadyPlayers] = new Set();
     }
 
     get id() {
@@ -51,6 +55,10 @@ class Game {
         return this[symGameLogic];
     }
 
+    get sockets() {
+        return this[symSockets];
+    }
+
     addPlayer(player) {
         return new Promise((resolve, reject) => {
             player = playerModel.findPlayer(player.id || player, true);
@@ -68,6 +76,8 @@ class Game {
                 });
             }
             playerList.push(player);
+            if (playerList.length === this[symMaxPlayerCount])
+                this[symGameState] = GameState.STARTED;
             resolve({
                 message: "Player added successfully",
                 playerCount: playerList.length
@@ -80,6 +90,7 @@ class Game {
             owner: this.owner,
             gameType: this.gameType,
             maximumNumberOfPlayers: this.maximumNumberOfPlayers,
+            joinedPlayers: this.players.length,
             state: this.gameState,
             id: this[symGameId]
         };
@@ -109,6 +120,19 @@ class Game {
         this[symGameState] = GameState.FINISHED;
         this[symGameLogic] = null;
     }
+
+    setPlayerReady(player) {
+        let readyPlayers = this[symReadyPlayers];
+        readyPlayers.add(player);
+    }
+
+    areAllPayersReady() {
+        var readyPlayers = this[symReadyPlayers];
+        var players = this[symPlayerList];
+        return players.length === players.filter(p => {
+            return readyPlayers.has(p);
+        }).length;
+    }
 }
 
 const getGames = (filter = {}) => {
@@ -118,7 +142,7 @@ const getGames = (filter = {}) => {
                 return false; //do not list finished games if state filter is not set
             }
             for (let k in filter) {
-                if(typeof filter[k] === "undefined")
+                if (typeof filter[k] === "undefined")
                     continue;
                 if (!(item[k] === filter[k] || filter[k] === (item[k] && item[k].id))) {
                     return false;

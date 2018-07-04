@@ -70,6 +70,12 @@ components:
           description: Maximum number of players
           minimum: 2
           maximum: 5
+        joinedPlayers:
+          type: number
+          format: int32
+          description: number of currently joined Players
+          minimum: 1
+          maximum: 5
         state:
           type: string
           description: Gives the state of the game

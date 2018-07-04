@@ -5,7 +5,7 @@ module.exports = exports = function(options = {}) {
     const router = express.Router();
 
     router.get("/game", (req, res, next) => {
-        gameModel.getGames({ id: req.query.id }).then(games => {
+        gameModel.getGames(req.query).then(games => {
             res.json(games);
         }).catch(err => {
             res.status(500).json(err);
